@@ -109,6 +109,10 @@
     }
   }
 
+  .center::-webkit-scrollbar {
+    display: none;
+  }
+
   .bottom {
     margin-top: auto;
     padding: 20px;
