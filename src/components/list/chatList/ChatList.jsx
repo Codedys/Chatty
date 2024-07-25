@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./chatList.css";
 import AddUser from "./addUser/AddUser";
 import { useUserStore } from "../../../lib/userStore";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../../lib/firebase";
 import { useChatStore } from "../../../lib/chatStore";
 
@@ -11,7 +11,7 @@ const ChatList = () => {
   const [chats, setChats] = useState([]);
 
   const { currentUser } = useUserStore();
-  const { changeChat} = useChatStore();
+  const { changeChat } = useChatStore();
 
   useEffect(() => {
     const unSub = onSnapshot(
@@ -22,13 +22,13 @@ const ChatList = () => {
           const userDocRef = doc(db, "users", item.receiverId);
           const userDocSnap = await getDoc(userDocRef);
 
-          const user = userDocSnap.data()
+          const user = userDocSnap.data();
 
-          return{...item, user};
+          return { ...item, user };
         });
-        const chatData = await Promise.all(promises)
+        const chatData = await Promise.all(promises);
 
-        setChats(chatData.sort((a,b)=> b.updatedAt-a.updatedAt))
+        setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt));
       }
     );
 
@@ -36,13 +36,37 @@ const ChatList = () => {
       unSub();
     };
   }, [currentUser.id]);
-  
+
+  const handleSelect = async (chat) => {
+
+    const  userChats = chats.map(item=>{
+      const {user, ...rest} = item;
+      return rest;
+     })
+
+     const chatIndex = userChats.findIndex(item => item.chatId === chat.chatId)
+     userChats[chatIndex].isSeen = true;
+
+     const userChatRef = doc(db,"userchats",currentUser.id)
+
+     try {
+       await updateDoc(userChatRef,{
+        chats:userChats,
+
+       })
 
 
-  const handleClick =  async (chats)=>{
-  
-    changeChat(chats.chatId,chats.user)
-  }
+       
+
+     } catch (error) {
+      console.log(error)
+      
+     }
+    
+
+     changeChat(chat.chatId, chat.user);
+
+  };
   
   return (
     <div className="chatList">
@@ -58,12 +82,19 @@ const ChatList = () => {
           onClick={() => setAddMode((prev) => !prev)}
         />
       </div>
-      {chats.map((chats) => (
-        <div className="item" key={chats.chatId} onClick={()=>handleClick(chats)}>
-          <img src={chats.user.avatar || "./avatar.png"} alt="" />
+      {chats.map((chat) => (
+        <div
+          className="item"
+          key={chat.chatId}
+          onClick={() => handleSelect(chat)}
+          style={{
+            backgroundColor: chat?.isSeen ? "transparent" : "#5138fe",
+          }}
+        >
+          <img src={chat.user.avatar || "./avatar.png"} alt="" />
           <div className="text">
-            <span>{chats.user.username}</span>
-            <p>{chats.lastMessage}</p>
+            <span>{chat.user.username}</span>
+            <p>{chat.lastMessage}</p>
           </div>
         </div>
       ))}

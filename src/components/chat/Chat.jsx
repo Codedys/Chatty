@@ -99,7 +99,7 @@ const Chat = () => {
       <div className="center">
         {chat?.messages?.map(message=>(
 
-          <div className="message own" key={message.createdAt}>
+          <div className="message own" key={message?.createdAt}>
           <div className="text">
             { message.img && <img src={message.img} alt="" />}
 
