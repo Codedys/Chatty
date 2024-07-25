@@ -1,18 +1,37 @@
-import { auth } from "../../lib/firebase"
-import "./detail.css"
+import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { useChatStore } from "../../lib/chatStore";
+import { auth, db } from "../../lib/firebase";
+import { useUserStore } from "../../lib/userStore";
+import "./detail.css";
 
 const Detail = () => {
-  return (
-    <div className='detail'>
+  const { currentUser } = useUserStore();
+  const { chatId, user, changeBlock, isCurrentUserBlocked, isReceiverBlocked } =
+    useChatStore();
+  const handleBlock = async () => {
+    if (!user) return;
 
+    const userDocRef = doc(db, "users", currentUser.id);
+
+    try {
+      await updateDoc(userDocRef, {
+        blocked: isReceiverBlocked ? arrayRemove(user.id) : arrayUnion(user.id),
+      });
+      changeBlock();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <div className="detail">
       <div className="user">
-        <img src="./avatar.png" alt="" />
-        <h2>Jane Doe</h2>
-        <p>Lorem ipsum dolor sit amet  .</p>
+        <img src={user?.avatar || "./avatar.png"} alt="" />
+        <h2>{user?.username}</h2>
+        <p>Lorem ipsum dolor sit amet .</p>
       </div>
 
       <div className="info">
-
         <div className="options">
           <div className="title">
             <span>Chat settings</span>
@@ -33,38 +52,37 @@ const Detail = () => {
             <img src="./arrowDown.png" alt="" />
           </div>
 
-        <div className="photo">
-          <div className="photoitem">
-            <div className="photodetail">
-            <img src="./avatar.png" alt="" />
-            <span>Photo_2024_.png</span>
+          <div className="photo">
+            <div className="photoitem">
+              <div className="photodetail">
+                <img src="./avatar.png" alt="" />
+                <span>Photo_2024_.png</span>
+              </div>
+              <img src="./download.png" alt="" className="icon" />
             </div>
-            <img src="./download.png" alt="" className="icon"/>
-          </div>
-          <div className="photoitem">
-            <div className="photodetail">
-            <img src="./avatar.png" alt="" />
-            <span>Photo_2024_.png</span>
+            <div className="photoitem">
+              <div className="photodetail">
+                <img src="./avatar.png" alt="" />
+                <span>Photo_2024_.png</span>
+              </div>
+              <img src="./download.png" alt="" className="icon" />
             </div>
-            <img src="./download.png" alt="" className="icon" />
-          </div>
-          <div className="photoitem">
-            <div className="photodetail">
-            <img src="./avatar.png" alt="" />
-            <span>Photo_2024_.png</span>
+            <div className="photoitem">
+              <div className="photodetail">
+                <img src="./avatar.png" alt="" />
+                <span>Photo_2024_.png</span>
+              </div>
+              <img src="./download.png" alt="" className="icon" />
             </div>
-            <img src="./download.png" alt="" className="icon" />
-          </div>
-          <div className="photoitem">
-            <div className="photodetail">
-            <img src="./avatar.png" alt="" />
-            <span>Photo_2024_.png</span>
+            <div className="photoitem">
+              <div className="photodetail">
+                <img src="./avatar.png" alt="" />
+                <span>Photo_2024_.png</span>
+              </div>
+              <img src="./download.png" alt="" className="icon" />
             </div>
-            <img src="./download.png" alt="" className="icon"/>
           </div>
         </div>
-        </div>
-
 
         <div className="options">
           <div className="title">
@@ -73,14 +91,19 @@ const Detail = () => {
           </div>
         </div>
 
-        <button>Block user</button>
-        <button  onClick={()=>auth.signOut()} className="logout">logout</button>
-
+        <button onClick={handleBlock}>
+          {isCurrentUserBlocked
+            ? "You are Blocked"
+            : isReceiverBlocked
+            ? "User Blocked"
+            : "Block User"}
+        </button>
+        <button onClick={() => auth.signOut()} className="logout">
+          logout
+        </button>
       </div>
-
-
     </div>
-  )
-}
+  );
+};
 
-export default Detail
+export default Detail;

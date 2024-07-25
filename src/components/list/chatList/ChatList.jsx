@@ -38,36 +38,29 @@ const ChatList = () => {
   }, [currentUser.id]);
 
   const handleSelect = async (chat) => {
-
-    const  userChats = chats.map(item=>{
-      const {user, ...rest} = item;
+    const userChats = chats.map((item) => {
+      const { user, ...rest } = item;
       return rest;
-     })
+    });
 
-     const chatIndex = userChats.findIndex(item => item.chatId === chat.chatId)
-     userChats[chatIndex].isSeen = true;
+    const chatIndex = userChats.findIndex(
+      (item) => item.chatId === chat.chatId
+    );
+    userChats[chatIndex].isSeen = true;
 
-     const userChatRef = doc(db,"userchats",currentUser.id)
+    const userChatRef = doc(db, "userchats", currentUser.id);
 
-     try {
-       await updateDoc(userChatRef,{
-        chats:userChats,
+    try {
+      await updateDoc(userChatRef, {
+        chats: userChats,
+      });
+    } catch (error) {
+      console.log(error);
+    }
 
-       })
-
-
-       
-
-     } catch (error) {
-      console.log(error)
-      
-     }
-    
-
-     changeChat(chat.chatId, chat.user);
-
+    changeChat(chat.chatId, chat.user);
   };
-  
+
   return (
     <div className="chatList">
       <div className="search">
@@ -91,9 +84,13 @@ const ChatList = () => {
             backgroundColor: chat?.isSeen ? "transparent" : "#5138fe",
           }}
         >
-          <img src={chat.user.avatar || "./avatar.png"} alt="" />
+          <img src={chat.user.blocked.includes(currentUser.id) ? "./avatar.png" :chat.user.avatar || "./avatar.png"} alt="" />
           <div className="text">
-            <span>{chat.user.username}</span>
+            <span>
+              {chat.user.blocked.includes(currentUser.id)
+                ? "user"
+                : chat.user.username}
+            </span>
             <p>{chat.lastMessage}</p>
           </div>
         </div>
