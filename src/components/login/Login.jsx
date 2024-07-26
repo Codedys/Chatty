@@ -53,12 +53,13 @@ const Login = () => {
         chats: [],
       });
 
-      toast.success("Account Created Successfully! you can now login!");
+      toast.success("Account Created Successfully!");
     } catch (err) {
       console.log(err);
       toast.error(err.message);
     }finally{
       setLoading(false);
+      window.location.reload();
     }
   };
 
@@ -80,6 +81,7 @@ const Login = () => {
       
     }finally{
       setLoading(false);
+
     }
   };
 

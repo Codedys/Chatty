@@ -1,4 +1,5 @@
 import "./addUser.css";
+import { toast } from "react-toastify";
 import {
   arrayUnion,
   collection,
@@ -51,6 +52,9 @@ const AddUser = () => {
 
     } catch (error) {
       console.log(error);
+      
+    }finally{
+      setUser(null)
     }
   };
 
@@ -67,9 +71,13 @@ const AddUser = () => {
 
       if (!querySnapshot.empty) {
         setUser(querySnapshot.docs[0].data());
+        
+      }else{
+        toast.error("User not Found!");
       }
     } catch (error) {
       console.log(error);
+      
     }
   };
   return (
