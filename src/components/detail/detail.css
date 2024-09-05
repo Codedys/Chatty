@@ -92,3 +92,14 @@
     }
   }
 }
+@media (max-width: 480px) {
+  .detail {
+    .user {
+      gap: 10px;
+    }
+    .info {
+      gap: 20px; 
+    } 
+  }
+
+}
