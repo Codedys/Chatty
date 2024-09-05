@@ -25,6 +25,7 @@ const App = () => {
   const toggleDetail = ()=>{
 
     setDisplayDetail((previous)=>!previous)
+    
   }
 
   useEffect(() => {
@@ -48,8 +49,11 @@ const App = () => {
             <>
               {displayChat ? (
                 <>
-                  {displayDetail && chatId && <Detail />}
-                  {chatId && <Chat  change ={toggleChat} toggleDetail={toggleDetail} />}
+                  {displayDetail ? (
+                  chatId && <Detail toggleDetail={toggleDetail} />
+                ) : (
+                  chatId && <Chat change={toggleChat} toggleDetail={toggleDetail} />
+                )}
                 </>
               ) : (
                 <List change ={toggleChat} />

@@ -81,6 +81,7 @@ const Login = () => {
       
     }finally{
       setLoading(false);
+      window.location.reload();
 
     }
   };

@@ -1,5 +1,17 @@
 .detail {
   flex: 1;
+
+  .icon {
+    display: flex;
+    margin-top: 10px;
+    align-items: center;
+    gap: 20px;
+
+    img {
+      height: 40px;
+      width: 40px;
+    }
+  }
   .user {
     padding: 30px 20px;
     display: flex;

@@ -4,7 +4,7 @@ import { auth, db } from "../../lib/firebase";
 import { useUserStore } from "../../lib/userStore";
 import "./detail.css";
 
-const Detail = () => {
+const Detail = ({ toggleDetail }) => {
   const { currentUser } = useUserStore();
   const { chatId, user, changeBlock, isCurrentUserBlocked, isReceiverBlocked } =
     useChatStore();
@@ -25,6 +25,9 @@ const Detail = () => {
 
   return (
     <div className="detail">
+      <div className="icon" onClick={() => toggleDetail()}>
+        <img src="./left.png" alt="" />
+      </div>
       <div className="user">
         <img src={user?.avatar || "./avatar.png"} alt="" />
         <h2>{user?.username}</h2>
@@ -67,20 +70,7 @@ const Detail = () => {
               </div>
               <img src="./download.png" alt="" className="icon" />
             </div>
-            <div className="photoitem">
-              <div className="photodetail">
-                <img src="./avatar.png" alt="" />
-                <span>Photo_2024_.png</span>
-              </div>
-              <img src="./download.png" alt="" className="icon" />
-            </div>
-            <div className="photoitem">
-              <div className="photodetail">
-                <img src="./avatar.png" alt="" />
-                <span>Photo_2024_.png</span>
-              </div>
-              <img src="./download.png" alt="" className="icon" />
-            </div>
+            
           </div>
         </div>
 
