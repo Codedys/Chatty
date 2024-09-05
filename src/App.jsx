@@ -1,10 +1,9 @@
-
 import List from "./components/list/List";
 import Chat from "./components/chat/Chat";
 import Detail from "./components/detail/Detail";
 import Login from "./components/login/Login";
 import Notification from "./components/notification/Notification";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./lib/firebase";
 import { useUserStore } from "./lib/userStore";
@@ -17,16 +16,36 @@ const App = () => {
   const [displayChat, setDisplayChat] = useState(false);
   const [displayDetail, setDisplayDetail] = useState(false);
 
+  const isFirstRender = useRef(true);
 
-  const toggleChat = ()=>{
+  const toggleChat = () => {
+    setDisplayChat((previous) => !previous);
+  };
+  const toggleDetail = () => {
+    setDisplayDetail((previous) => !previous);
+  };
 
-    setDisplayChat((previous)=>!previous)
-  }
-  const toggleDetail = ()=>{
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const isSmall = window.innerWidth <= 768;
+      if (isFirstRender.current) {
+        if (isSmall) {
+          setSmallScreen(true);
+        }
+        isFirstRender.current = false;
+      } else {
+        setSmallScreen(isSmall);
+      }
+    };
 
-    setDisplayDetail((previous)=>!previous)
-    
-  }
+    window.addEventListener("resize", checkScreenSize);
+
+    checkScreenSize();
+
+    return () => {
+      window.removeEventListener("resize", checkScreenSize);
+    };
+  }, []);
 
   useEffect(() => {
     const unSub = onAuthStateChanged(auth, (user) => {
@@ -49,14 +68,14 @@ const App = () => {
             <>
               {displayChat ? (
                 <>
-                  {displayDetail ? (
-                  chatId && <Detail toggleDetail={toggleDetail} />
-                ) : (
-                  chatId && <Chat change={toggleChat} toggleDetail={toggleDetail} />
-                )}
+                  {displayDetail
+                    ? chatId && <Detail toggleDetail={toggleDetail} />
+                    : chatId && (
+                        <Chat change={toggleChat} toggleDetail={toggleDetail} />
+                      )}
                 </>
               ) : (
-                <List change ={toggleChat} />
+                <List change={toggleChat} />
               )}
             </>
           ) : (

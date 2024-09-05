@@ -5,6 +5,7 @@
     display: flex;
     margin-top: 10px;
     align-items: center;
+    display: none;
     gap: 20px;
 
     img {
@@ -106,6 +107,10 @@
 }
 @media (max-width: 480px) {
   .detail {
+    .icon {
+      display: block;
+    
+    }
     .user {
       gap: 10px;
     }
