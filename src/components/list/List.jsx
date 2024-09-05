@@ -2,11 +2,11 @@ import ChatList from "./chatList/ChatList"
 import "./list.css"
 import UserInfo from "./userInfo/UserInfo"
 
-const List = () => {
+const List = ({change}) => {
   return (
     <div className='list'>
       <UserInfo/>
-      <ChatList/>
+      <ChatList change={change} />
     </div>
   )
 }

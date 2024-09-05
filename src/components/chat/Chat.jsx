@@ -13,7 +13,7 @@ import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 import upload from "../upload";
 
-const Chat = () => {
+const Chat = ({change,toggleDetail} ) => {
   const [open, setOpen] = useState(false);
   const [chat, setChat] = useState();
   const [text, setText] = useState("");
@@ -111,6 +111,9 @@ const Chat = () => {
   return (
     <div className="chat">
       <div className="top">
+      <div className="icon" onClick={()=>change()}>
+          <img src="./left.png" alt="" />
+        </div>
         <div className="user">
           <img src={user?.avatar || "./avatar.png"} alt="" />
           <div className="text">
@@ -118,11 +121,7 @@ const Chat = () => {
             <p>my name is Jhon</p>
           </div>
         </div>
-        <div className="icons">
-          <img src="./phone.png" alt="" />
-          <img src="./video.png" alt="" />
-          <img src="./info.png" alt="" />
-        </div>
+          <img src="./info.png" alt=""  onClick={()=>{toggleDetail()}}/>
       </div>
       <div className="center">
         {chat?.messages?.map((message) => (

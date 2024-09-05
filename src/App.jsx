@@ -1,3 +1,4 @@
+
 import List from "./components/list/List";
 import Chat from "./components/chat/Chat";
 import Detail from "./components/detail/Detail";
@@ -13,7 +14,18 @@ const App = () => {
   const { currentUser, isLoading, fetchUserInfo } = useUserStore();
   const { chatId } = useChatStore();
   const [smallScreen, setSmallScreen] = useState(true);
-  const [displayChat, setDisplayChat] = useState(true);
+  const [displayChat, setDisplayChat] = useState(false);
+  const [displayDetail, setDisplayDetail] = useState(false);
+
+
+  const toggleChat = ()=>{
+
+    setDisplayChat((previous)=>!previous)
+  }
+  const toggleDetail = ()=>{
+
+    setDisplayDetail((previous)=>!previous)
+  }
 
   useEffect(() => {
     const unSub = onAuthStateChanged(auth, (user) => {
@@ -33,17 +45,16 @@ const App = () => {
       {currentUser ? (
         <>
           {smallScreen ? (
-            displayChat ? (
-              <>
-              
-
-                {/* {chatId && <Chat />} */}
-                {chatId && <Detail />}
-              
-              </>
-            ) : (
-              <List />
-            )
+            <>
+              {displayChat ? (
+                <>
+                  {displayDetail && chatId && <Detail />}
+                  {chatId && <Chat  change ={toggleChat} toggleDetail={toggleDetail} />}
+                </>
+              ) : (
+                <List change ={toggleChat} />
+              )}
+            </>
           ) : (
             <>
               <List />

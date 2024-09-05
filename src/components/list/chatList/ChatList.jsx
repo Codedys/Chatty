@@ -6,7 +6,7 @@ import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../../lib/firebase";
 import { useChatStore } from "../../../lib/chatStore";
 
-const ChatList = () => {
+const ChatList = ({change,}) => {
   const [addMode, setAddMode] = useState(false);
   const [chats, setChats] = useState([]);
   const [input, setInput] = useState("");
@@ -87,7 +87,11 @@ const ChatList = () => {
         <div
           className="item"
           key={chat.chatId}
-          onClick={() => handleSelect(chat)}
+          onClick={() => {
+            handleSelect(chat)
+            change()
+
+          }}
           style={{
             backgroundColor: chat?.isSeen ? "transparent" : "#5138fe",
           }}
