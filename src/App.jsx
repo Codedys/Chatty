@@ -12,7 +12,7 @@ import { useChatStore } from "./lib/chatStore";
 const App = () => {
   const { currentUser, isLoading, fetchUserInfo } = useUserStore();
   const { chatId } = useChatStore();
-  const [smallScreen, setSmallScreen] = useState(true);
+  const [smallScreen, setSmallScreen] = useState(false);
   const [displayChat, setDisplayChat] = useState(false);
   const [displayDetail, setDisplayDetail] = useState(false);
 
