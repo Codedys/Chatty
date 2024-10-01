@@ -196,14 +196,14 @@
 
     .bottom {
       margin-top: auto;
-      padding: 20px;
+      padding: 5px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       border-top: 1px solid #dddddd35;
       gap: 10px;
   
-      .icon {
+      .icons {
         display: flex;
         gap: 10px;
       }
@@ -245,10 +245,11 @@
       .sendButton {
         background-color: #5183fe;
         color: white;
+        padding: 5px 10px;
         border: none;
         
         cursor: pointer;
-        border-radius: 1px;
+        border-radius: 5px;
   
         &:disabled {
           background-color: #5182fe88;
